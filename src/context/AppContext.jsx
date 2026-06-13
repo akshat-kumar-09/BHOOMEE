@@ -30,10 +30,10 @@ function readTeamId() {
     return (
       import.meta.env.VITE_TEAM_ID ||
       localStorage.getItem("bhumi_team") ||
-      "bhumi-duo"
+      "bhoomee-duo"
     );
   } catch {
-    return "bhumi-duo";
+    return "bhoomee-duo";
   }
 }
 
