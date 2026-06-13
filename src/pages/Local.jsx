@@ -8,6 +8,7 @@ import StepCoach from "../components/StepCoach.jsx";
 import AskJane from "../components/AskJane.jsx";
 import BrandHeader from "../components/BrandHeader.jsx";
 import TeamBar from "../components/TeamBar.jsx";
+import CrewPlan from "../components/CrewPlan.jsx";
 import { tierFor, dirMeta } from "../lib/score.js";
 import { calibrate } from "../lib/calibration.js";
 import { useApp } from "../context/AppContext.jsx";
@@ -59,6 +60,9 @@ export default function Local({ city, onOpenPlayground }) {
         </div>
         <p style={{ fontSize: 14, color: "#4A483A", lineHeight: 1.65, margin: 0, fontWeight: 400 }}>{city.briefing}</p>
       </div>
+
+      {/* Jane coordinating the crew on the lead mission */}
+      <CrewPlan pipe={city.pipelines[0]} city={city} />
 
       {/* Start here — calibrated starter tasks */}
       {profile && starters.length > 0 && (

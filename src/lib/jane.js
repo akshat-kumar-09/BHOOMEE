@@ -151,6 +151,46 @@ export async function coachJane({ history, step, cityName, profile }) {
   }
 }
 
+// ─── Crew coordinator (Jane runs point for the duo) ───────────────
+
+const COORDINATOR_SYSTEM = (cityName, profile) =>
+  `You are Jane — the voice of the earth, now running point for a small crew doing a time-boxed environmental sprint in ${cityName}.
+
+You are given the crew (with who's online), the pipeline's steps with which are done and by whom, and the clock. Your job is to ACTIVELY COORDINATE them — not cheer, coordinate.
+
+In 3-5 short sentences:
+- Assign the next concrete move to each ONLINE person BY NAME, so no two people do the same step.
+- Call the single most important handoff happening right now.
+- Give one blunt pace read against the time left — are they on track to finish by sundown or not?
+- End with the one thing to do in the next 10 minutes.
+
+Address the crew directly by name. Witty, specific, decisive. Never preachy, never generic, no emoji, no markdown headers. ${profileLine(profile)}`;
+
+function crewSummary({ pipelineTitle, crew, steps, clock, remainingMins, me }) {
+  const lines = [];
+  lines.push(`Mission: "${pipelineTitle}".`);
+  lines.push(`Crew: ${crew.map((c) => `${c.name}${c.id === me?.id ? " (this is me)" : ""} — ${c.online ? "online now" : "away"}`).join("; ")}.`);
+  lines.push("Steps:");
+  steps.forEach((s, i) => {
+    lines.push(`  ${i + 1}. ${s.action} (${s.time}) — ${s.done ? `DONE${s.by ? ` by ${s.by}` : ""}` : "not done"}`);
+  });
+  const left = remainingMins >= 60 ? `${Math.floor(remainingMins / 60)}h ${remainingMins % 60}m` : `${remainingMins}m`;
+  lines.push(`Clock: it's ${clock} now. Estimated work left across unfinished steps: ${left}.`);
+  return lines.join("\n");
+}
+
+export async function coordinateJane({ pipelineTitle, crew, steps, clock, remainingMins, me, cityName, profile }) {
+  const system = COORDINATOR_SYSTEM(cityName || "your city", profile);
+  const content = crewSummary({ pipelineTitle, crew, steps, clock, remainingMins, me });
+
+  if (!janeIsLive()) return mockCoordinate({ crew, steps, me });
+  try {
+    return (await complete({ system, messages: [{ role: "user", content }], maxTokens: 400 })) || mockCoordinate({ crew, steps, me });
+  } catch {
+    return mockCoordinate({ crew, steps, me });
+  }
+}
+
 // ─── Parse [STEP] {...} blocks out of a reply ─────────────────────
 
 export function parseSteps(text) {
@@ -242,6 +282,25 @@ function mockPlayground(history, cityName) {
     return `Now we're sharpening. Here's the first rung — small enough that one person could do it today, concrete enough to count.${MOCK_STEP}\n\nWho else on your street would notice the same thing? We need to know how many hands this really takes.`;
   }
   return `That's a pipeline taking shape. The bottleneck is usually the step that needs more than one person — name it, and we'll design around it. What would tell you, six weeks from now, that this actually worked?${MOCK_STEP}`;
+}
+
+function mockCoordinate({ crew, steps, me }) {
+  const online = (crew || []).filter((c) => c.online);
+  const meName = me?.name || (online[0]?.name) || "you";
+  const mate = online.find((c) => c.id !== me?.id);
+  const nextUndone = (steps || []).findIndex((s) => !s.done);
+  const doneCount = (steps || []).filter((s) => s.done).length;
+  const total = (steps || []).length || 1;
+  const nextStep = nextUndone >= 0 ? steps[nextUndone] : null;
+
+  if (!nextStep) {
+    return `That's the whole sprint cleared between you — ${doneCount}/${total}. ${meName}, post the final map and tag River Action; ${mate ? mate.name : "your teammate"}, send the link to one person who lives by that river. Hand off the relay in the next 10 minutes while it's hot.`;
+  }
+  if (mate) {
+    const after = steps[nextUndone + 1];
+    return `${doneCount}/${total} down — you're moving. ${meName}, take "${nextStep.action}" now. ${mate.name}, don't wait on them — start "${(after || nextStep).action}" in parallel so you're not both idle. That overlap is your only shot at finishing by sundown; next 10 minutes, both of you move.`;
+  }
+  return `${doneCount}/${total} done and you're solo on the crew right now, ${meName}. Take "${nextStep.action}" next and ping your teammate to come online — this sprint is built for two. Next 10 minutes: ${nextStep.action.toLowerCase()}.`;
 }
 
 function mockCoach(history, step) {
