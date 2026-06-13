@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+/* ════════════════════════════════════════════════════════════════
+   BHUMI — design tokens. Lifted verbatim from jane_mvp.jsx.
+   The body is Bhumi. The voice is Jane. Restraint over decoration.
+═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Surfaces */
+  --bg: #FAF8F2;          /* cream background */
+  --card: #FFFFFF;        /* card surface */
+  --border: #ECEAE1;      /* hairline border */
+  --border-strong: #C9C5B8;
+  --ink: #1A1A14;         /* primary text */
+
+  /* The three pillars of the 333 score */
+  --earth: #2D6B22;       /* Earth */
+  --people: #1E5F8C;      /* People */
+  --momentum: #9A6A1A;    /* Momentum */
+
+  /* Supporting ink */
+  --ink-soft: #4A483A;
+  --ink-mute: #5A5848;
+  --ink-faint: #8A8678;
+  --ink-ghost: #9A968A;
+  --ink-whisper: #A8A496;
+
+  /* Tints */
+  --tint-cream: #F7F5EE;
+  --tint-earth: #EAF2E5;
+  --tint-jane: #FAFAF4;
+
+  /* Motion — nothing snaps, nothing bounces */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1); /* ease-out */
+  --t-fast: 200ms;
+  --t-base: 280ms;
+  --t-slow: 400ms;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Outfit", system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+/* ─── Motion primitives ──────────────────────────────────────────
+   Page changes: 250ms cross-fade, no slide.
+   New items: fade + 4px slide up.
+   Jane's bubbles: 280ms fade-up from below.
+   Checkmarks: 200ms grow.
+──────────────────────────────────────────────────────────────── */
+
+@keyframes bhumi-crossfade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes bhumi-rise {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bhumi-jane-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bhumi-grow {
+  from { transform: scale(0.4); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.bhumi-page {
+  animation: bhumi-crossfade 250ms var(--ease) both;
+}
+
+.bhumi-rise {
+  animation: bhumi-rise var(--t-base) var(--ease) both;
+}
+
+.bhumi-jane-rise {
+  animation: bhumi-jane-rise var(--t-base) var(--ease) both;
+}
+
+.bhumi-grow {
+  animation: bhumi-grow var(--t-fast) var(--ease) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Hide scrollbars on the canvas while keeping scroll */
+.bhumi-no-scrollbar::-webkit-scrollbar { display: none; }
+.bhumi-no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
