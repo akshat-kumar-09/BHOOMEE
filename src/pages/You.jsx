@@ -77,6 +77,17 @@ export default function You() {
 function TeamSection({ team }) {
   const [draft, setDraft] = useState(team.name || "");
   const [copied, setCopied] = useState(false);
+  const [join, setJoin] = useState("");
+
+  const go = (code) => {
+    const clean = (code || "").trim().toLowerCase().replace(/\s+/g, "-");
+    if (!clean) return;
+    try {
+      const u = new URL(window.location.href);
+      u.searchParams.set("team", clean);
+      window.location.assign(u.toString());
+    } catch { /* ignore */ }
+  };
 
   const shareLink = (() => {
     try {
@@ -151,6 +162,25 @@ function TeamSection({ team }) {
         </button>
       </div>
       <div style={{ fontSize: 11, color: "#A8A496", marginTop: 8 }}>Open this link on the other phone to join team “{team.teamId}”.</div>
+
+      {/* Private room */}
+      <div style={{ borderTop: "1px solid #F2F0E8", marginTop: 16, paddingTop: 16 }}>
+        <div style={{ fontSize: 12, color: "#9A968A", marginBottom: 7 }}>Want a room that's just yours?</div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <input
+            value={join}
+            onChange={(e) => setJoin(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && go(join)}
+            placeholder="enter a room code to join"
+            style={{ flex: 1, minWidth: 0, border: "1px solid #ECEAE1", borderRadius: 10, padding: "10px 12px", fontSize: 13, color: "#1A1A14", fontFamily: "inherit", outline: "none", background: "#FAFAF4" }}
+          />
+          <button onClick={() => go(join)} disabled={!join.trim()} style={{ padding: "0 14px", border: "1px solid #ECEAE1", borderRadius: 10, background: "#FFFFFF", color: "#5A5848", fontSize: 13, fontWeight: 600, cursor: join.trim() ? "pointer" : "default", opacity: join.trim() ? 1 : 0.5, fontFamily: "inherit" }}>Join</button>
+        </div>
+        <button onClick={() => go("bhoomee-" + Math.random().toString(36).slice(2, 7))} style={{ marginTop: 10, width: "100%", padding: "11px 0", border: "1px dashed #C9E0B5", borderRadius: 10, background: "#FBFCF9", color: "#2D6B22", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>
+          Start a fresh private room
+        </button>
+        <div style={{ fontSize: 11, color: "#A8A496", marginTop: 8 }}>You're in “{team.teamId}” now. A private room gives you a secret code so only people you invite share progress.</div>
+      </div>
     </div>
   );
 }

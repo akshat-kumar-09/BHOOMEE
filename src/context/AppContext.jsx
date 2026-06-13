@@ -59,7 +59,8 @@ function readName() {
 }
 
 const TEAM_ID = readTeamId();
-const ONLINE_WINDOW = 70 * 1000; // 70s presence window
+const ONLINE_WINDOW = 70 * 1000; // 70s → the green "online" dot
+const RECENT_WINDOW = 15 * 60 * 1000; // 15 min → still shown as "away"; older ghosts drop off
 
 export function AppProvider({ children }) {
   const [profile, setProfile] = useState(DEFAULT_PROFILE);
@@ -177,6 +178,7 @@ export function AppProvider({ children }) {
     const now = Date.now();
     return Object.entries(members)
       .map(([id, m]) => ({ id, name: m?.name || "Member", at: m?.at || 0, online: now - (m?.at || 0) < ONLINE_WINDOW }))
+      .filter((m) => m.id === userId.current || now - m.at < RECENT_WINDOW) // drop stale ghosts; always keep self
       .sort((a, b) => b.at - a.at);
   }, [members]);
 

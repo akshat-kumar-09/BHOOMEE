@@ -1,0 +1,14 @@
+{
+  "name": "Bhumi · The Earth has work for you",
+  "short_name": "Bhumi",
+  "description": "A premium environmental civic action app, voiced by Jane.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF8F2",
+  "theme_color": "#FAF8F2",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
