@@ -66,14 +66,19 @@ export default function StepCoach({ step, color = "#2D6B22" }) {
 }
 
 function ActionCoach({ step, color, onClose }) {
-  const { profile, cityId } = useApp();
+  const { profile, cityId, getChat, setChat } = useApp();
   const city = CITIES.find((c) => c.id === (cityId || USER_CITY));
   const cityName = city?.name || "your city";
 
+  // Keyed by the step's own action text, so the same mission's conversation
+  // survives closing this panel, or navigating away and back to the page
+  // that opened it (both of which unmount this component).
+  const chatKey = step.action;
   const seed = { role: "user", hidden: true, content: `I'm ready to do this now. Walk me through "${step.action}", fast.` };
-  const [messages, setMessages] = useState([seed]);
+  const cached = getChat(chatKey);
+  const [messages, setMessages] = useState(cached || [seed]);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!cached);
   const [pendingImage, setPendingImage] = useState(null); // { dataUrl, base64, mediaType }
   const bottomRef = useRef(null);
   const startedRef = useRef(false);
@@ -90,6 +95,7 @@ function ActionCoach({ step, color, onClose }) {
   useEffect(() => {
     if (startedRef.current) return;
     startedRef.current = true;
+    if (cached) { setLoading(false); return; } // resuming — Jane already opened this one
     (async () => {
       const reply = await coachJane({ history: [seed], step, cityName, profile });
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
@@ -97,6 +103,10 @@ function ActionCoach({ step, color, onClose }) {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    setChat(chatKey, messages);
+  }, [messages, chatKey, setChat]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });

@@ -77,6 +77,16 @@ export function AppProvider({ children }) {
   const userId = useRef(readUserId());
   const [name, setNameState] = useState(readName());
 
+  // Survives tab switches: Today's fetched mission pack, and every open
+  // "Do it with Jane" conversation (keyed by the step's action text), so
+  // navigating away and back doesn't wipe either.
+  const [todayPack, setTodayPack] = useState(null);
+  const [janeChats, setJaneChats] = useState({});
+  const getChat = useCallback((key) => janeChats[key], [janeChats]);
+  const setChat = useCallback((key, messages) => {
+    setJaneChats((prev) => ({ ...prev, [key]: messages }));
+  }, []);
+
   // Live mirrors so write helpers can compute next-array values safely.
   const communityRef = useRef(communityPipelines);
   const proposalsRef = useRef(proposals);
@@ -197,6 +207,10 @@ export function AppProvider({ children }) {
     savePrivate,
     shareWithCity,
     proposeToBhumi,
+    todayPack,
+    setTodayPack,
+    getChat,
+    setChat,
     // team
     team: {
       shared: SHARED,

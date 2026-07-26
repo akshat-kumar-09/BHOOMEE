@@ -3,6 +3,7 @@ import BrandHeader from "../components/BrandHeader.jsx";
 import StepCoach from "../components/StepCoach.jsx";
 import { getPosition, isEurope, buildContext } from "../lib/geo.js";
 import { generatePack } from "../lib/pilgrimEngine.js";
+import { useApp } from "../context/AppContext.jsx";
 
 const DOMAIN_COLOR = {
   Water: "#1E5F8C", Air: "#5A5848", Light: "#9A6A1A",
@@ -10,8 +11,9 @@ const DOMAIN_COLOR = {
 };
 
 export default function Today() {
-  const [state, setState] = useState("idle"); // idle | working | ready | notEurope | error
-  const [pack, setPack] = useState(null);
+  const { todayPack, setTodayPack } = useApp();
+  const [state, setState] = useState(todayPack ? "ready" : "idle"); // idle | working | ready | notEurope | error
+  const [pack, setPack] = useState(todayPack);
   const [errorMsg, setErrorMsg] = useState("");
   const [countryName, setCountryName] = useState("");
 
@@ -35,6 +37,7 @@ export default function Today() {
         liveState,
       });
       setPack(built);
+      setTodayPack(built);
       setState("ready");
     } catch (err) {
       setErrorMsg(err?.message || "Couldn't get a location fix — check your device's location permission.");
