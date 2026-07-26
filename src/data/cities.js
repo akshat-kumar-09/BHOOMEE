@@ -1,62 +1,58 @@
 /* ════════════════════════════════════════════════════════════════
-   BHUMI — 33 cities, researched and ranked by need.
+   BHUMI — 33 cities, all in Europe, researched and ranked by need.
    Score out of 333 = Earth (111) + People (111) + Momentum (111)
    Lower score = more urgent. These 33 are picked not as the worst,
    but as the most SOLVABLE — civic mechanisms exist, people can act.
-
-   This data is the single source of truth, ported verbatim from the
-   Bhumi reference. Do not invent data — extend only.
 ═══════════════════════════════════════════════════════════════════ */
 
 export const USER_CITY = "london"; // detected location — set to London for the day
 
 export const CITIES = [
   {
-    id: "mumbai", name: "Mumbai", country: "India", region: "South Asia",
-    score: { earth: 22, people: 24, momentum: 32, total: 78 }, direction: "declining",
-    headline: "The Mithi River is an open sewer. The mangroves that shield the city are being built over.",
-    briefing: "Mumbai has India's fiercest environmental lawyers and its most relentless construction lobby. Both are right here. The mangroves are the city's flood wall — and they're vanishing one permit at a time.",
+    id: "belgrade", name: "Belgrade", country: "Serbia", region: "Europe",
+    score: { earth: 24, people: 26, momentum: 26, total: 76 }, direction: "declining",
+    headline: "Where the Sava meets the Danube — and a decade-long waterfront project keeps walling the public off from both.",
+    briefing: "Belgrade sits on one of Europe's great river confluences. A massive riverside development has spent a decade fencing off public land along the Sava, opposed the whole way by 'Ne davimo Beograd' ('Don't Let Belgrade Drown'), one of the region's largest grassroots movements. The rivers are still here. So is the fight for public access to them.",
     pipelines: [
-      { id: "mithi", title: "Defend the mangroves", subtitle: "The city's natural flood barrier, disappearing.", icon: "🌿", color: "#2D6B22", peopleActive: 31, steps: [
-        { action: "Photograph mangrove encroachment", detail: "Walk the coastline near Mahim or Versova. Photograph any construction, dumping, or clearing in mangrove zones. GPS-tag it.", time: "30 min", peopleNeeded: 40, peopleDone: 18, jane: "Every photo with a timestamp and coordinate is admissible. You're building a case file, not a scrapbook." },
-        { action: "File a complaint with the Mangrove Cell", detail: "Maharashtra has a dedicated Mangrove Cell. Jane gives you the form and the email. Attach your photos.", time: "10 min", peopleNeeded: 30, peopleDone: 6, jane: "It exists because activists forced it into existence. Use what they built." },
-        { action: "Tag the National Green Tribunal", detail: "The NGT has ordered mangrove protection before. A coordinated social campaign with evidence gets cases reopened.", time: "10 min", peopleNeeded: 100, peopleDone: 4, jane: "India's courts have teeth on environment. The bottleneck is getting cases in front of them." },
+      { id: "sava", title: "Reclaim the riverbank", subtitle: "A public river, increasingly walled off by development.", icon: "💧", color: "#1E5F8C", peopleActive: 10, steps: [
+        { action: "Document a blocked or degraded access point", detail: "Walk the Sava or Danube bank near you. Photograph any fenced-off public land, dumping, or construction encroaching on the water's edge.", time: "30 min", peopleNeeded: 40, peopleDone: 10, jane: "Every metre of riverbank that gets fenced off is one this city won't easily get back. A photo today is the record that it was ever public." },
+        { action: "Join a river cleanup", detail: "Local groups run cleanups along both rivers, especially after floods wash debris downstream. Jane connects you to the next one.", time: "3 hrs", peopleNeeded: 30, peopleDone: 3, jane: "Two rivers meet at this city and carried it for a thousand years. An afternoon pulling trash out is the smallest repayment." },
       ]},
     ],
   },
   {
-    id: "jakarta", name: "Jakarta", country: "Indonesia", region: "Southeast Asia",
-    score: { earth: 24, people: 28, momentum: 33, total: 85 }, direction: "declining",
-    headline: "The city is sinking faster than any on Earth. The air ranks among the world's worst.",
-    briefing: "Jakarta is sinking up to 25cm a year as groundwater is pumped out. The government is literally moving the capital. But 10 million people stay — and the rivers can still be saved.",
+    id: "krakow", name: "Kraków", country: "Poland", region: "Europe",
+    score: { earth: 26, people: 28, momentum: 34, total: 88 }, direction: "rising",
+    headline: "Winter smog ranks among the worst in Europe — but a citizen movement forced the country's first coal ban.",
+    briefing: "Kraków's basin geography traps coal smoke every winter, and for years officials denied how bad it was. Krakow Smog Alarm, a grassroots group founded by residents, changed that — pushing through Poland's first regional ban on coal and wood home heating. The ban is real; getting the last old stoves out is the unfinished part.",
     pipelines: [
-      { id: "ciliwung", title: "Reclaim the Ciliwung River", subtitle: "Choked with plastic, the city's main river still flows.", icon: "💧", color: "#1E5F8C", peopleActive: 22, steps: [
-        { action: "Join a river cleanup", detail: "Community groups run weekend cleanups on the Ciliwung. Jane connects you. Bring gloves, leave with data on what you pulled out.", time: "3 hrs", peopleNeeded: 50, peopleDone: 22, jane: "The waste you collect gets weighed and logged. That weight becomes the argument for upstream action." },
-        { action: "Document a plastic source", detail: "Trace the trash upstream. Find where it enters the river — a market, a factory drain, an informal dump. Photograph it.", time: "45 min", peopleNeeded: 30, peopleDone: 8, jane: "Cleaning the river is mopping the floor with the tap running. Finding the tap is the real win." },
+      { id: "smog-krakow", title: "Finish the coal-stove phase-out", subtitle: "Poland's first coal ban started here. Some stoves remain.", icon: "🫁", color: "#8A3A5A", peopleActive: 9, steps: [
+        { action: "Log an air quality reading on a still winter day", detail: "Use an air quality app or a personal sensor on a cold, windless morning — when smog is worst. Screenshot the reading with time and location.", time: "5 min", peopleNeeded: 60, peopleDone: 9, jane: "Kraków's smog hides in still air on cold mornings. A single screenshot, taken at the right hour, is the same evidence that got the ban passed in the first place." },
+        { action: "Report a stove still burning coal or waste", detail: "The ban prohibits solid-fuel heating in the city. If you spot black smoke from a chimney, report it to the city's environmental hotline with photos.", time: "10 min", peopleNeeded: 30, peopleDone: 4, jane: "One law on paper and one stove still lit are two different things. Reporting closes that gap, chimney by chimney." },
       ]},
     ],
   },
   {
-    id: "mexico-city", name: "Mexico City", country: "Mexico", region: "Latin America",
-    score: { earth: 28, people: 31, momentum: 33, total: 92 }, direction: "stalling",
-    headline: "A city built on a drained lake is running out of water while sinking into the ground.",
-    briefing: "Mexico City pumps water from an aquifer faster than rain can refill it, so the ground sinks — cracking pipes, losing 40% of water to leaks. The lake it was built on could be its salvation.",
+    id: "bucharest", name: "Bucharest", country: "Romania", region: "Europe",
+    score: { earth: 28, people: 30, momentum: 36, total: 94 }, direction: "rising",
+    headline: "One of Europe's lowest green-space ratios — except for a wetland residents refused to let be paved.",
+    briefing: "Bucharest has less green space per person than almost any EU capital. But Văcărești — an abandoned Communist-era reservoir — grew wild for thirty years and became a genuine urban wetland, alive with herons, foxes and orchids. Local naturalists fought to protect it instead of letting it be developed, and in 2016 it became Romania's first urban nature park. It's proof the city can still choose wild over paved.",
     pipelines: [
-      { id: "agua", title: "Stop the water leaks", subtitle: "40% of the city's water is lost before it reaches a tap.", icon: "💧", color: "#1E5F8C", peopleActive: 18, steps: [
-        { action: "Report a visible leak", detail: "Burst pipes and street flooding are everywhere. Photograph, locate, report to SACMEX. Jane logs it to build the map.", time: "5 min", peopleNeeded: 100, peopleDone: 18, jane: "Four out of ten litres never arrive. Each leak you report is water a family doesn't get." },
-        { action: "Install a rain capture point", detail: "Jane connects you to Isla Urbana, who install rainwater systems. Host one, or fund one for a household in Iztapalapa.", time: "varies", peopleNeeded: 25, peopleDone: 5, jane: "The city sits under a rainy season it wastes entirely. Catching it is the oldest technology there is." },
+      { id: "vacaresti", title: "Defend the wild wetland", subtitle: "An abandoned reservoir that became a nature park by refusing to be built over.", icon: "🌿", color: "#2D6B22", peopleActive: 8, steps: [
+        { action: "Join a species count in the park", detail: "Văcărești Nature Park runs citizen bio-monitoring walks. Log birds, plants and insects you see with iNaturalist.", time: "1 hr", peopleNeeded: 30, peopleDone: 8, jane: "This park exists because people proved, sighting by sighting, that it was already alive. Every count you add is another brick in that case." },
+        { action: "Push for a second wild space", detail: "Bucharest has dozens of neglected lots that could rewild the way Văcărești did. Identify one near you and propose it to your local council.", time: "20 min", peopleNeeded: 25, peopleDone: 3, jane: "Văcărești wasn't planted — it was simply left alone and then defended. The cheapest park in the world is the one nobody paves." },
       ]},
     ],
   },
   {
-    id: "bangkok", name: "Bangkok", country: "Thailand", region: "Southeast Asia",
-    score: { earth: 30, people: 33, momentum: 35, total: 98 }, direction: "stalling",
-    headline: "Seasonal smog closes schools. The canals that named the 'Venice of the East' run black.",
-    briefing: "Bangkok's PM2.5 season turns the sky grey and empties the schools. The old canal network — the khlongs — could move water and cool the city, if they weren't treated as drains.",
+    id: "milan", name: "Milan", country: "Italy", region: "Europe",
+    score: { earth: 30, people: 33, momentum: 33, total: 96 }, direction: "stalling",
+    headline: "Trapped by the Alps, the Po Valley's air is some of the most polluted in Europe — and Milan sits at its centre.",
+    briefing: "Milan's basin geography traps pollution against the Alps, giving the Po Valley some of the worst PM2.5 readings on the continent most winters. The city has fought back with 'Piazze Aperte' — turning car junctions into plazas — and one of Europe's most ambitious low-emission zones. The geography won't change. The traffic can.",
     pipelines: [
-      { id: "khlong", title: "Revive the khlongs", subtitle: "The historic canals, now treated as sewers.", icon: "🌿", color: "#2D6B22", peopleActive: 14, steps: [
-        { action: "Map a polluted khlong", detail: "Pick a canal near you. Photograph the worst pollution points and any direct waste pipes. GPS-tag everything.", time: "30 min", peopleNeeded: 40, peopleDone: 14, jane: "These canals once carried boats and breeze. They can again. First, we map the wounds." },
-        { action: "Report illegal discharge", detail: "Direct sewage pipes into khlongs are illegal but common. Report them to the BMA with your photo evidence.", time: "10 min", peopleNeeded: 30, peopleDone: 3, jane: "The law is already on your side here. It's just not being read aloud. Be the one who reads it." },
+      { id: "po-valley-air", title: "Clear the valley air", subtitle: "Trapped by the Alps, some of Europe's worst PM2.5 readings.", icon: "🫁", color: "#8A3A5A", peopleActive: 12, steps: [
+        { action: "Check air quality outside a school at drop-off", detail: "Open an air quality app during the morning rush. Screenshot the PM2.5 reading outside a school gate, where idling engines concentrate.", time: "5 min", peopleNeeded: 60, peopleDone: 12, jane: "The valley traps what the cars put out. A school gate at 8am is where that trapped air lands hardest — on the smallest lungs." },
+        { action: "Support the next Piazza Aperta", detail: "Milan converts car junctions into plazas through public consultation. Back a proposal near you or nominate a junction that needs one.", time: "15 min", peopleNeeded: 30, peopleDone: 4, jane: "Every square metre of asphalt turned to piazza is one less place for engines to idle. Small junctions, real air." },
       ]},
     ],
   },
@@ -73,14 +69,14 @@ export const CITIES = [
     ],
   },
   {
-    id: "tel-aviv", name: "Tel Aviv", country: "Israel", region: "Middle East",
-    score: { earth: 34, people: 40, momentum: 37, total: 111 }, direction: "stalling",
-    headline: "A coast of jellyfish blooms and sewage spills, in a country that mastered water but not its sea.",
-    briefing: "Israel recycles 90% of its wastewater — a world record — yet the Mediterranean coast still takes spills and plastic. The Yarkon River was once dead. It's been clawed back to life. That playbook works.",
+    id: "zagreb", name: "Zagreb", country: "Croatia", region: "Europe",
+    score: { earth: 36, people: 38, momentum: 38, total: 112 }, direction: "stalling",
+    headline: "The Sava runs through the city and a wild mountain forest sits at its edge — both taken for granted.",
+    briefing: "Zagreb has genuine natural wealth on its doorstep: the Sava river cutting through the city, and Medvednica, a forested mountain nature park rising straight from the northern suburbs. Both see more traffic and litter each year than active stewardship. The infrastructure to protect them exists — the attention doesn't always follow.",
     pipelines: [
-      { id: "yarkon", title: "Protect the Yarkon's comeback", subtitle: "A river brought back from the dead, still fragile.", icon: "💧", color: "#1E5F8C", peopleActive: 12, steps: [
-        { action: "Survey the riverbank", detail: "Walk the Yarkon. Note pollution, invasive plants, or dumping. The recovery is real but reversible. Log what you see.", time: "30 min", peopleNeeded: 30, peopleDone: 12, jane: "This river was a punchline for decades. Now fish are back. Don't let it slide again on your watch." },
-        { action: "Report a coastal spill", detail: "If you see oil, sewage, or a fish die-off on the coast, photograph and report to the Environmental Protection Ministry.", time: "10 min", peopleNeeded: 40, peopleDone: 3, jane: "The sea can't file a complaint. You can." },
+      { id: "sava-medvednica", title: "Steward the river and the mountain", subtitle: "A wild river and a mountain forest, both underwatched.", icon: "🌿", color: "#2D6B22", peopleActive: 7, steps: [
+        { action: "Photograph a stretch of the Sava riverbank", detail: "Walk any accessible stretch of the Sava within the city. Photograph litter, erosion or illegal dumping. GPS-tag it.", time: "30 min", peopleNeeded: 30, peopleDone: 7, jane: "A river running straight through a capital city and mostly unwatched is rare. Being the person who watches it is rarer still." },
+        { action: "Report trail damage on Medvednica", detail: "Erosion and illegal off-trail riding damage the nature park's paths. Report damaged sections to the park authority with a photo.", time: "10 min", peopleNeeded: 20, peopleDone: 3, jane: "A mountain inside city-bus range is a gift most capitals don't have. Reporting a broken trail is how you say thank you." },
       ]},
     ],
   },
@@ -97,14 +93,14 @@ export const CITIES = [
     ],
   },
   {
-    id: "cape-town", name: "Cape Town", country: "South Africa", region: "Africa",
-    score: { earth: 40, people: 42, momentum: 40, total: 122 }, direction: "stalling",
-    headline: "The city that nearly hit 'Day Zero' — the day the taps run dry — still lives on the edge.",
-    briefing: "Cape Town stared down Day Zero in 2018 and pulled back through sheer collective behaviour change. That muscle memory is the city's superpower. The unique fynbos ecosystem and the rivers need it now.",
+    id: "budapest", name: "Budapest", country: "Hungary", region: "Europe",
+    score: { earth: 38, people: 42, momentum: 42, total: 122 }, direction: "stalling",
+    headline: "Famous for its thermal baths, less famous for what all that warm water eventually does to the Danube.",
+    briefing: "Budapest's thermal springs feed the city's famous baths — and much of that heated, mineral-rich water eventually reaches the Danube, alongside runoff and litter from a fast-growing riverside. The Danube is one of Europe's most-monitored rivers on paper. Ground-level reporting from residents is still what catches what the monitors miss.",
     pipelines: [
-      { id: "rivers", title: "Clean the urban rivers", subtitle: "The Black, Liesbeek and Salt rivers carry the city's pollution to sea.", icon: "💧", color: "#1E5F8C", peopleActive: 15, steps: [
-        { action: "Join a river warrior cleanup", detail: "Groups run cleanups on the Liesbeek and Black rivers. Jane connects you. Log what comes out.", time: "3 hrs", peopleNeeded: 40, peopleDone: 15, jane: "This city moved as one to beat Day Zero. The rivers are the next thing worth moving for." },
-        { action: "Clear invasive alien plants", detail: "Invasive species drink the water fynbos and rivers need. Volunteer hack groups remove them. Powerful, physical, effective.", time: "4 hrs", peopleNeeded: 30, peopleDone: 6, jane: "Pulling invasive pines literally returns water to the catchment. You can measure it in litres." },
+      { id: "danube-budapest", title: "Watch the river the baths feed", subtitle: "Thermal water and city runoff, both heading for the Danube.", icon: "💧", color: "#1E5F8C", peopleActive: 9, steps: [
+        { action: "Document a stretch of the Danube embankment", detail: "Walk a section of the embankment. Photograph litter, discharge points, or erosion. GPS-tag what you find.", time: "30 min", peopleNeeded: 40, peopleDone: 9, jane: "The Danube runs through ten countries and gets talked about in all of them. What it actually looks like on your stretch is something only you can show." },
+        { action: "Join a riverbank cleanup", detail: "Local groups run Danube cleanup days, especially after spring floods bring debris downstream. Jane connects you to the next one.", time: "3 hrs", peopleNeeded: 25, peopleDone: 3, jane: "A river this famous deserves better than being everyone's problem and no one's responsibility. Take an afternoon and make it yours." },
       ]},
     ],
   },
@@ -258,14 +254,14 @@ export const CITIES = [
     ],
   },
   {
-    id: "sydney", name: "Sydney", country: "Australia", region: "Oceania",
-    score: { earth: 54, people: 53, momentum: 51, total: 158 }, direction: "stalling",
-    headline: "Bushfire smoke, bleaching reefs offshore, and stormwater fouling the famous harbour beaches.",
-    briefing: "Sydney's beaches close after rain as stormwater carries the city into the sea. The harbour is iconic and fragile. Australians know fire and drought now in their bones — that knowledge is ready to mobilise.",
+    id: "helsinki", name: "Helsinki", country: "Finland", region: "Europe",
+    score: { earth: 52, people: 54, momentum: 54, total: 160 }, direction: "rising",
+    headline: "The Baltic Sea just offshore is one of the most polluted seas on Earth — fed by farmland hundreds of miles inland.",
+    briefing: "Helsinki's own coastal waters are relatively clean, but the Baltic Sea it opens onto suffers severe eutrophication — algae blooms fed by phosphorus runoff from farms across nine countries. Finnish organisations like the John Nurminen Foundation have shown real progress is possible, funding phosphorus-removal upgrades at treatment plants around the sea. The problem is regional. So is the fix.",
     pipelines: [
-      { id: "harbour", title: "Keep the beaches open", subtitle: "Stormwater closes Sydney's beaches after every big rain.", icon: "🌊", color: "#1E5F8C", peopleActive: 16, steps: [
-        { action: "Log a beach pollution event", detail: "Beach closed or murky after rain? Note it, photograph it, submit to Jane. Build the rainfall-pollution pattern.", time: "5 min", peopleNeeded: 50, peopleDone: 16, jane: "Beachgoers notice closures but nobody connects the dots across the city. You're the dot-connector." },
-        { action: "Adopt a stormwater drain", detail: "Drains marked with a fish flow straight to the sea. Keep yours clear of litter. Stencil it if it isn't marked.", time: "20 min", peopleNeeded: 40, peopleDone: 7, jane: "Whatever goes down that drain is on the beach by tomorrow. No filter. No treatment. Just the sea." },
+      { id: "baltic-helsinki", title: "Push back the algae blooms", subtitle: "A sea stressed by farms hundreds of miles away.", icon: "🌊", color: "#1E5F8C", peopleActive: 10, steps: [
+        { action: "Report a summer algal bloom", detail: "Log the location, date and severity of any blue-green algae bloom you see on the coast. Regional monitoring bodies use citizen reports to track bloom spread.", time: "5 min", peopleNeeded: 30, peopleDone: 10, jane: "The Baltic's blooms move fast and monitoring can't be everywhere. A bather noticing green water is sometimes the earliest warning there is." },
+        { action: "Back a phosphorus-reduction project", detail: "Organisations fund treatment-plant upgrades around the Baltic. Support or share their current project — every tonne of phosphorus kept out is measurable.", time: "15 min", peopleNeeded: 20, peopleDone: 3, jane: "This sea won't be saved from Helsinki's shoreline alone. It'll be saved nine countries at a time. Add your weight to one of them." },
       ]},
     ],
   },
@@ -354,14 +350,14 @@ export const CITIES = [
     ],
   },
   {
-    id: "toronto", name: "Toronto", country: "Canada", region: "North America",
+    id: "ljubljana", name: "Ljubljana", country: "Slovenia", region: "Europe",
     score: { earth: 64, people: 64, momentum: 64, total: 192 }, direction: "rising",
-    headline: "Lake Ontario's shoreline and the ravine network — a wild green web most cities can't imagine.",
-    briefing: "Toronto sits on Lake Ontario and is laced with ravines — a hidden wilderness running through the city. The lake is the drinking water for millions. Both are in decent shape and worth keeping that way.",
+    headline: "Europe's greenest capital on paper — car-free centre, zero-waste target — still short of both.",
+    briefing: "Ljubljana banned cars from its historic centre in 2007 and set one of Europe's most ambitious zero-waste targets soon after, earning it European Green Capital in 2016. It's a genuine model. It's also not finished — recycling rates have plateaued short of the target, and the Ljubljanica still carries litter through the postcard centre everyone photographs.",
     pipelines: [
-      { id: "ravines", title: "Steward the ravines", subtitle: "A wild green network threading the whole city.", icon: "🌿", color: "#2D6B22", peopleActive: 17, steps: [
-        { action: "Survey a ravine for invasives", detail: "Garlic mustard, dog-strangling vine and buckthorn choke the ravines. Map them on a walk. Jane logs the data.", time: "45 min", peopleNeeded: 40, peopleDone: 17, jane: "You have a wilderness running behind your houses. Most cities paved theirs. Toronto kept its. Tend it." },
-        { action: "Join a ravine cleanup or planting", detail: "Groups restore native plants and clear trash from the ravines. Jane connects you to the next event.", time: "3 hrs", peopleNeeded: 30, peopleDone: 6, jane: "Native plantings in a ravine ripple out — birds, insects, cooler air downstream. Small patch, wide effect." },
+      { id: "ljubljanica", title: "Close the gap to zero waste", subtitle: "A model city, short of its own target.", icon: "♻️", color: "#2D6B22", peopleActive: 8, steps: [
+        { action: "Audit your own waste for a week", detail: "Track what you throw away for a week and sort what could have been recycled or composted instead. Log the gap. Jane shows you where the city's own target sits.", time: "varies", peopleNeeded: 30, peopleDone: 8, jane: "A city can set a target. Only its residents can actually hit it. This is where the gap between the two lives." },
+        { action: "Photograph litter on the Ljubljanica", detail: "Walk the river through the old town. Photograph any litter caught against the banks or bridges. The postcard view and the real one are often different.", time: "20 min", peopleNeeded: 25, peopleDone: 3, jane: "Every tourist photographs this river from the bridges. Almost no one photographs what's actually floating in it. Be the second kind." },
       ]},
     ],
   },
