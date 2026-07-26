@@ -2,6 +2,8 @@ import { useState } from "react";
 import { AppProvider, useApp } from "./context/AppContext.jsx";
 import Local from "./pages/Local.jsx";
 import Global from "./pages/Global.jsx";
+import Today from "./pages/Today.jsx";
+import Library from "./pages/Library.jsx";
 import Playground from "./pages/Playground.jsx";
 import You from "./pages/You.jsx";
 import TabBar from "./components/TabBar.jsx";
@@ -20,7 +22,9 @@ function Shell() {
             Playground stays mounted (display toggle) to preserve the
             conversation and draft as the user tabs away and back. */}
         {page === "local" && <Local key="local" city={city} onOpenPlayground={() => setPage("playground")} />}
+        {page === "today" && <Today key="today" />}
         {page === "global" && <Global key="global" />}
+        {page === "library" && <Library key="library" />}
         {page === "you" && <You key="you" />}
 
         <div style={{ display: page === "playground" ? "block" : "none" }}>

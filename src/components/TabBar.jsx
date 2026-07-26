@@ -4,7 +4,9 @@
 
 const TABS = [
   { id: "local", label: "Local", icon: PinIcon },
+  { id: "today", label: "Today", icon: SunIcon },
   { id: "global", label: "Global", icon: GlobeIcon },
+  { id: "library", label: "Library", icon: BookIcon },
   { id: "playground", label: "Playground", icon: SparkIcon },
   { id: "you", label: "You", icon: PersonIcon },
 ];
@@ -90,6 +92,24 @@ function SparkIcon({ color }) {
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
       <path d="M12 3.5c.6 3.8 1.7 4.9 5.5 5.5-3.8.6-4.9 1.7-5.5 5.5-.6-3.8-1.7-4.9-5.5-5.5 3.8-.6 4.9-1.7 5.5-5.5Z" stroke={color} strokeWidth="1.6" strokeLinejoin="round" />
       <path d="M18 14.5c.3 1.7.8 2.2 2.5 2.5-1.7.3-2.2.8-2.5 2.5-.3-1.7-.8-2.2-2.5-2.5 1.7-.3 2.2-.8 2.5-2.5Z" stroke={color} strokeWidth="1.4" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function SunIcon({ color }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="4.2" stroke={color} strokeWidth="1.7" />
+      <path d="M12 2.5v2.6M12 18.9v2.6M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.2 19.8L6 18M18 6l1.8-1.8" stroke={color} strokeWidth="1.7" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function BookIcon({ color }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <path d="M4 4.5c2.2-1 5-1 8 .5 3-1.5 5.8-1.5 8-.5v14c-2.2-1-5-1-8 .5-3-1.5-5.8-1.5-8-.5v-14Z" stroke={color} strokeWidth="1.6" strokeLinejoin="round" />
+      <path d="M12 5v14" stroke={color} strokeWidth="1.6" />
     </svg>
   );
 }
