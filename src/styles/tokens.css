@@ -91,6 +91,11 @@ textarea {
   to   { transform: scale(1); opacity: 1; }
 }
 
+@keyframes bhumi-typing-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-3px); opacity: 1; }
+}
+
 .bhumi-page {
   animation: bhumi-crossfade 250ms var(--ease) both;
 }
