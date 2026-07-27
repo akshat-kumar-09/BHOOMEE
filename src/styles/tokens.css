@@ -7,7 +7,7 @@
 
 :root {
   /* Surfaces */
-  --bg: #FAF8F2;          /* cream background */
+  --bg: #F3ECDD;          /* warm paper, not flat cream */
   --card: #FFFFFF;        /* card surface */
   --border: #ECEAE1;      /* hairline border */
   --border-strong: #C9C5B8;
@@ -17,6 +17,15 @@
   --earth: #2D6B22;       /* Earth */
   --people: #1E5F8C;      /* People */
   --momentum: #9A6A1A;    /* Momentum */
+
+  /* The wider palette — the same one the pilgrim prototype proved out.
+     Used for accents, gradients and domain colour where the flat
+     earth/people/momentum trio is too narrow (Home, empty states, the
+     brand mark). */
+  --dawn: #E5A15B;        /* warm accent — the sun, the CTA glow */
+  --river: #3E6B6A;       /* deep teal accent */
+  --moss: #6E7A4F;        /* muted green accent */
+  --clay: #1C1710;        /* near-black, warmer than pure ink */
 
   /* Supporting ink */
   --ink-soft: #4A483A;
@@ -29,6 +38,16 @@
   --tint-cream: #F7F5EE;
   --tint-earth: #EAF2E5;
   --tint-jane: #FAFAF4;
+  --tint-dawn: #FBEEDD;
+
+  /* Depth — flat 1px borders read as a spreadsheet. Cards get a soft
+     lift instead. */
+  --shadow-card: 0 1px 2px rgba(28, 23, 16, 0.04), 0 8px 20px -12px rgba(28, 23, 16, 0.18);
+  --shadow-lift: 0 4px 10px -4px rgba(28, 23, 16, 0.16), 0 16px 32px -16px rgba(28, 23, 16, 0.22);
+
+  /* Type */
+  --font-ui: "Outfit", system-ui, -apple-system, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
 
   /* Motion — nothing snaps, nothing bounces */
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1); /* ease-out */
@@ -47,11 +66,20 @@ html, body {
 }
 
 body {
-  font-family: "Outfit", system-ui, -apple-system, sans-serif;
-  background: var(--bg);
+  font-family: var(--font-ui);
+  background:
+    radial-gradient(circle at 12% 0%, var(--tint-dawn) 0%, transparent 45%),
+    radial-gradient(circle at 100% 30%, rgba(62, 107, 106, 0.08) 0%, transparent 40%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+.bhumi-display {
+  font-family: var(--font-display);
+  font-weight: 600;
 }
 
 #root {

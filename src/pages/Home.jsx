@@ -129,15 +129,36 @@ export default function Home() {
 function DomainPipeline({ group, place, completed, toggleStep, expanded, onToggle }) {
   const meta = DOMAIN_META[group.domain] || { color: "#5A5848", icon: "•" };
   const doneCount = group.steps.filter((m) => completed[m.id]).length;
+  const complete = doneCount === group.steps.length;
 
   return (
-    <div style={{ background: "#FFFFFF", border: `1px solid ${expanded ? "#C9C5B8" : "#ECEAE1"}`, borderRadius: 14, marginBottom: 10, overflow: "hidden", transition: "border-color 0.2s" }}>
+    <div
+      style={{
+        background: "#FFFFFF",
+        borderRadius: 16,
+        marginBottom: 12,
+        overflow: "hidden",
+        borderLeft: `4px solid ${meta.color}`,
+        boxShadow: expanded ? "var(--shadow-lift)" : "var(--shadow-card)",
+        transition: "box-shadow 0.2s",
+      }}
+    >
       <div onClick={onToggle} style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 18px", cursor: "pointer", userSelect: "none" }}>
-        <span style={{ fontSize: 22 }}>{meta.icon}</span>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 15, fontWeight: 600, color: "#1A1A14", marginBottom: 2 }}>{group.domain} portrait of {place}</div>
-          <div style={{ fontSize: 12.5, color: "#8A8678", lineHeight: 1.4 }}>{group.steps.length} mission{group.steps.length > 1 ? "s" : ""} building the picture</div>
+        <div
+          style={{
+            width: 42, height: 42, borderRadius: "50%", flexShrink: 0, fontSize: 19,
+            background: `${meta.color}17`, display: "flex", alignItems: "center", justifyContent: "center",
+          }}
+        >
+          {meta.icon}
         </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="bhumi-display" style={{ fontSize: 16.5, color: "#1C1710", marginBottom: 2 }}>{group.domain} portrait of {place}</div>
+          <div style={{ fontSize: 12.5, color: "#8A8678", lineHeight: 1.4 }}>
+            {complete ? "Complete — every mission done" : `${group.steps.length} mission${group.steps.length > 1 ? "s" : ""} building the picture`}
+          </div>
+        </div>
+        {complete && !expanded && <span style={{ fontSize: 15 }}>✓</span>}
         <span style={{ fontSize: 18, color: "#C9C5B8", transition: "transform 0.2s", transform: expanded ? "rotate(90deg)" : "none", flexShrink: 0 }}>›</span>
       </div>
 
@@ -185,14 +206,30 @@ function DomainPipeline({ group, place, completed, toggleStep, expanded, onToggl
 
 function EmptyState({ onFind }) {
   return (
-    <div style={{ textAlign: "center", padding: "40px 0 20px" }}>
-      <p style={{ fontSize: 14.5, color: "#4A483A", lineHeight: 1.6, marginBottom: 6, maxWidth: 420, marginLeft: "auto", marginRight: "auto" }}>
-        Jane can read the season, the light, and the water nearest to you right now, and turn it into a pipeline worth finishing — not just a to-do list.
+    <div style={{ textAlign: "center", padding: "36px 24px 28px", background: "#FFFFFF", borderRadius: 20, boxShadow: "var(--shadow-card)" }}>
+      <div
+        style={{
+          width: 64, height: 64, borderRadius: "50%", margin: "0 auto 18px", fontSize: 28,
+          background: "radial-gradient(circle at 32% 28%, #A9C9E8, #3E6B6A 70%)",
+          boxShadow: "0 4px 14px -4px rgba(62,107,106,0.55), inset 0 1px 1px rgba(255,255,255,0.4)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}
+      >
+        🧭
+      </div>
+      <p className="bhumi-display" style={{ fontSize: 19, color: "#1C1710", lineHeight: 1.35, marginBottom: 10, maxWidth: 380, marginLeft: "auto", marginRight: "auto" }}>
+        Jane can read the season, the light, and the water nearest to you — right now.
       </p>
-      <p style={{ fontSize: 12.5, color: "#9A968A", marginBottom: 22 }}>Europe only for now — Jane's still learning the rest of the map.</p>
+      <p style={{ fontSize: 13.5, color: "#8A7F68", lineHeight: 1.6, marginBottom: 22, maxWidth: 360, marginLeft: "auto", marginRight: "auto" }}>
+        Not a to-do list — a pipeline worth finishing. Europe only for now, while Jane learns the rest of the map.
+      </p>
       <button
         onClick={onFind}
-        style={{ border: "none", borderRadius: 999, background: "#2D6B22", color: "#fff", fontSize: 14, fontWeight: 600, padding: "12px 24px", cursor: "pointer", fontFamily: "inherit" }}
+        style={{
+          border: "none", borderRadius: 999, color: "#fff", fontSize: 14.5, fontWeight: 600, padding: "13px 28px", cursor: "pointer", fontFamily: "inherit",
+          background: "linear-gradient(135deg, #4E8A47, #2D6B22)",
+          boxShadow: "0 6px 16px -4px rgba(45,107,34,0.5)",
+        }}
       >
         Find my ground
       </button>
@@ -204,7 +241,7 @@ function RetryButton({ onClick, label = "Try again" }) {
   return (
     <button
       onClick={onClick}
-      style={{ border: "1px solid #ECEAE1", borderRadius: 999, background: "#FFFFFF", color: "#4A483A", fontSize: 13, fontWeight: 600, padding: "9px 18px", cursor: "pointer", fontFamily: "inherit" }}
+      style={{ border: "1px solid #ECEAE1", borderRadius: 999, background: "#FFFFFF", color: "#4A483A", fontSize: 13, fontWeight: 600, padding: "9px 18px", cursor: "pointer", fontFamily: "inherit", boxShadow: "var(--shadow-card)" }}
     >
       {label}
     </button>

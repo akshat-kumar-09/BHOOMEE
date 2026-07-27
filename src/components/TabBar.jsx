@@ -29,17 +29,17 @@ export default function TabBar({ page, onChange }) {
           pointerEvents: "auto",
           width: "100%",
           maxWidth: 680,
-          background: "rgba(250,248,242,0.92)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          borderTop: "1px solid #ECEAE1",
+          background: "rgba(255,255,255,0.85)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          boxShadow: "0 -4px 16px -8px rgba(28,23,16,0.15)",
           display: "flex",
           padding: "8px 8px calc(8px + env(safe-area-inset-bottom, 0px))",
         }}
       >
         {TABS.map((tab) => {
           const active = page === tab.id;
-          const color = active ? "#2D6B22" : "#9A968A";
+          const color = active ? "#2D6B22" : "#A39C89";
           const Icon = tab.icon;
           return (
             <button
@@ -53,13 +53,20 @@ export default function TabBar({ page, onChange }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                gap: 3,
-                padding: "6px 0",
+                gap: 4,
+                padding: "6px 0 4px",
                 transition: "color 0.2s",
               }}
             >
-              <Icon color={color} />
-              <span style={{ fontSize: 11, fontWeight: active ? 600 : 500, color }}>{tab.label}</span>
+              <div
+                style={{
+                  width: 44, height: 30, borderRadius: 15, display: "flex", alignItems: "center", justifyContent: "center",
+                  background: active ? "#DCEBD5" : "transparent", transition: "background 0.2s",
+                }}
+              >
+                <Icon color={color} />
+              </div>
+              <span style={{ fontSize: 10.5, fontWeight: active ? 700 : 500, color }}>{tab.label}</span>
             </button>
           );
         })}

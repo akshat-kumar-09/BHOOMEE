@@ -20,9 +20,9 @@ function Recenter({ lat, lon }) {
   return null;
 }
 
-export default function LocationMap({ lat, lon, height = 160 }) {
+export default function LocationMap({ lat, lon, height = 170 }) {
   return (
-    <div style={{ height, borderRadius: 14, overflow: "hidden", border: "1px solid #ECEAE1", marginBottom: 18 }}>
+    <div style={{ height, borderRadius: 18, overflow: "hidden", boxShadow: "var(--shadow-lift)", marginBottom: 20, border: "3px solid #FFFFFF" }}>
       <MapContainer
         center={[lat, lon]}
         zoom={14}
