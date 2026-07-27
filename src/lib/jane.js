@@ -81,7 +81,7 @@ export async function askJane({ question, city, profile, scope = "local" }) {
   const context =
     scope === "local" && city
       ? `You are speaking to someone in ${city.name}, ${city.country}. The city scores ${city.score.total}/333 and is ${city.direction}. Key issue: ${city.headline} ${profileLine(profile)}`
-      : `You are speaking about the global picture across the 33 cities Bhumi tracks. Be willing to compare cities and zoom out to planetary scale. ${profileLine(profile)}`;
+      : `You are speaking about the global picture across the 33 cities Bhoomee tracks. Be willing to compare cities and zoom out to planetary scale. ${profileLine(profile)}`;
 
   const system = `You are Jane — the voice of Mother Earth, translated into language people can act on. ${context} ${JANE_VOICE} Every reply should make the person feel they can do one real thing, and that it's sharper than the thing they'd have thought of on their own. 2-4 sentences. You are not an AI assistant; you are Jane.`;
 

@@ -86,7 +86,7 @@ export default function Playground({ city, onBack, onSaved }) {
     const pipe = buildPipe();
     proposeToBhumi(pipe, city.id, handle);
     setConfirmPropose(false);
-    setSavedNote("Submitted to Bhumi's team for review. If it lands, it joins your city's official 333 plan.");
+    setSavedNote("Submitted to Bhoomee's team for review. If it lands, it joins your city's official 333 plan.");
   };
 
   const canSave = draft && draft.steps.length >= 2;
@@ -153,7 +153,7 @@ export default function Playground({ city, onBack, onSaved }) {
               <div style={{ display: "flex", gap: 8 }}>
                 <TrayButton onClick={doSavePrivate} primary>Save privately</TrayButton>
                 <TrayButton onClick={doShare}>Share with my city</TrayButton>
-                <TrayButton onClick={() => setConfirmPropose(true)}>Propose to Bhumi</TrayButton>
+                <TrayButton onClick={() => setConfirmPropose(true)}>Propose to Bhoomee</TrayButton>
               </div>
             )}
           </div>
@@ -314,9 +314,9 @@ function ConfirmDialog({ onCancel, onConfirm, city }) {
   return (
     <div onClick={onCancel} style={{ position: "fixed", inset: 0, background: "rgba(26,26,20,0.32)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, zIndex: 60 }}>
       <div onClick={(e) => e.stopPropagation()} className="bhumi-jane-rise" style={{ background: "#FFFFFF", border: "1px solid #ECEAE1", borderRadius: 16, padding: "22px 22px", maxWidth: 380, width: "100%" }}>
-        <div style={{ fontSize: 16, fontWeight: 700, color: "#1A1A14", marginBottom: 8 }}>Propose to Bhumi?</div>
+        <div style={{ fontSize: 16, fontWeight: 700, color: "#1A1A14", marginBottom: 8 }}>Propose to Bhoomee?</div>
         <p style={{ fontSize: 13.5, color: "#5A5848", lineHeight: 1.6, margin: "0 0 18px" }}>
-          This will be reviewed by Bhumi's team and may become an official pipeline in {city.name}'s 333 plan. Continue?
+          This will be reviewed by Bhoomee's team and may become an official pipeline in {city.name}'s 333 plan. Continue?
         </p>
         <div style={{ display: "flex", gap: 8 }}>
           <button onClick={onCancel} style={{ flex: 1, cursor: "pointer", fontFamily: "inherit", fontSize: 14, fontWeight: 600, padding: "11px 0", borderRadius: 10, background: "#F7F5EE", border: "1px solid #ECEAE1", color: "#5A5848" }}>

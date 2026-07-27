@@ -33,7 +33,7 @@ if (firebaseReady()) {
     const app = initializeApp(config);
     db = getFirestore(app);
   } catch (e) {
-    console.warn("[Bhumi] Firebase failed to init — falling back to local mode.", e);
+    console.warn("[Bhoomee] Firebase failed to init — falling back to local mode.", e);
     db = null;
   }
 }

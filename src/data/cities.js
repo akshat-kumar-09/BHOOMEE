@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════════
-   BHUMI — 33 cities, all in Europe, researched and ranked by need.
+   BHOOMEE — 33 cities, all in Europe, researched and ranked by need.
    Score out of 333 = Earth (111) + People (111) + Momentum (111)
    Lower score = more urgent. These 33 are picked not as the worst,
    but as the most SOLVABLE — civic mechanisms exist, people can act.
@@ -453,5 +453,5 @@ export const GLOBAL_STATS = [
   { label: "Species threatened", value: "47,000+", delta: "on the IUCN Red List", bad: true },
   { label: "Renewable energy share", value: "32%", delta: "up from 22% in 2015", bad: false },
   { label: "Forest lost (2024)", value: "3.7M ha", delta: "primary tropical forest", bad: true },
-  { label: "Cities Bhumi tracks", value: "33", delta: "and growing", bad: false },
+  { label: "Cities Bhoomee tracks", value: "33", delta: "and growing", bad: false },
 ];

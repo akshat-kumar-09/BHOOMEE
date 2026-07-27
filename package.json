@@ -1,9 +1,9 @@
 {
-  "name": "bhumi",
+  "name": "bhoomee",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Bhumi — a premium environmental civic action app. The Earth has work for you.",
+  "description": "Bhoomee — a premium environmental civic action app. The Earth has work for you.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

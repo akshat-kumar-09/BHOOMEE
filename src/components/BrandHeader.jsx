@@ -1,4 +1,4 @@
-/* Bhumi brand mark. The body is Bhumi; the voice is Jane. */
+/* Bhoomee brand mark. The body is Bhoomee; the voice is Jane. */
 export default function BrandHeader({ subtitle = "The Earth has work for you" }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 20 }}>
@@ -6,7 +6,7 @@ export default function BrandHeader({ subtitle = "The Earth has work for you" })
         🌍
       </div>
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 19, fontWeight: 700, color: "#1A1A14", lineHeight: 1, letterSpacing: "-0.01em" }}>Bhumi</div>
+        <div style={{ fontSize: 19, fontWeight: 700, color: "#1A1A14", lineHeight: 1, letterSpacing: "-0.01em" }}>Bh∞mee</div>
         <div style={{ fontSize: 12, color: "#9A968A", marginTop: 2 }}>{subtitle}</div>
       </div>
     </div>

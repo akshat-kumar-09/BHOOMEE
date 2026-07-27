@@ -1,5 +1,5 @@
 /* Jane's signature note — the small green-tagged italic line that
-   appears under steps and in briefings throughout Bhumi. */
+   appears under steps and in briefings throughout Bhoomee. */
 
 export default function JaneNote({ children, tone = "step" }) {
   if (tone === "step") {
