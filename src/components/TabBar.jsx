@@ -1,10 +1,9 @@
-/* Bottom tab bar — Local · Global · Playground · You.
+/* Bottom tab bar — Home · Global · Library · Playground · You.
    Fixed to the bottom, centered within the 680px column. The active
    tab is marked with the earth-green accent. Switching is instant. */
 
 const TABS = [
-  { id: "local", label: "Local", icon: PinIcon },
-  { id: "today", label: "Today", icon: SunIcon },
+  { id: "home", label: "Home", icon: HomeIcon },
   { id: "global", label: "Global", icon: GlobeIcon },
   { id: "library", label: "Library", icon: BookIcon },
   { id: "playground", label: "Playground", icon: SparkIcon },
@@ -69,11 +68,12 @@ export default function TabBar({ page, onChange }) {
   );
 }
 
-function PinIcon({ color }) {
+function HomeIcon({ color }) {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ transition: "stroke 0.2s" }}>
-      <path d="M12 21s7-6.5 7-11a7 7 0 1 0-14 0c0 4.5 7 11 7 11Z" stroke={color} strokeWidth="1.7" strokeLinejoin="round" />
-      <circle cx="12" cy="10" r="2.4" stroke={color} strokeWidth="1.7" />
+      <path d="M4 11.5 12 4l8 7.5" stroke={color} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M6 10v9.5h12V10" stroke={color} strokeWidth="1.7" strokeLinejoin="round" />
+      <path d="M10 19.5V14h4v5.5" stroke={color} strokeWidth="1.7" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -92,15 +92,6 @@ function SparkIcon({ color }) {
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
       <path d="M12 3.5c.6 3.8 1.7 4.9 5.5 5.5-3.8.6-4.9 1.7-5.5 5.5-.6-3.8-1.7-4.9-5.5-5.5 3.8-.6 4.9-1.7 5.5-5.5Z" stroke={color} strokeWidth="1.6" strokeLinejoin="round" />
       <path d="M18 14.5c.3 1.7.8 2.2 2.5 2.5-1.7.3-2.2.8-2.5 2.5-.3-1.7-.8-2.2-2.5-2.5 1.7-.3 2.2-.8 2.5-2.5Z" stroke={color} strokeWidth="1.4" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function SunIcon({ color }) {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="4.2" stroke={color} strokeWidth="1.7" />
-      <path d="M12 2.5v2.6M12 18.9v2.6M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.2 19.8L6 18M18 6l1.8-1.8" stroke={color} strokeWidth="1.7" strokeLinecap="round" />
     </svg>
   );
 }
