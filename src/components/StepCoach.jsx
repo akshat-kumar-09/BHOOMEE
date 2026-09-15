@@ -1,34 +1,111 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { coachJane, janeIsLive } from "../lib/jane.js";
 import { useApp } from "../context/AppContext.jsx";
 import { CITIES, USER_CITY } from "../data/cities.js";
 
 const MAX_IMAGES = 6;
+const MEDIA_ACCEPT = "image/*,video/*,.heic,.heif";
 
-// Downscales on-device before it ever leaves the phone — mission photos are
-// often taken on data out in the field, so keep the upload small.
+// Downscales on-device before upload. Uses createImageBitmap when available
+// so iPad HEIC photos (the default Camera format) still go through.
 function resizeImage(file, maxDim = 1280, quality = 0.82) {
+  return decodeToBitmap(file).then((bitmap) => {
+    const scale = Math.min(1, maxDim / Math.max(bitmap.width, bitmap.height));
+    const w = Math.round(bitmap.width * scale);
+    const h = Math.round(bitmap.height * scale);
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    canvas.getContext("2d").drawImage(bitmap, 0, 0, w, h);
+    if (typeof bitmap.close === "function") bitmap.close();
+    const dataUrl = canvas.toDataURL("image/jpeg", quality);
+    return { dataUrl, base64: dataUrl.split(",")[1], mediaType: "image/jpeg", kind: "image" };
+  });
+}
+
+function decodeToBitmap(file) {
+  if (typeof createImageBitmap === "function") {
+    return createImageBitmap(file).catch(() => decodeViaImageElement(file));
+  }
+  return decodeViaImageElement(file);
+}
+
+function decodeViaImageElement(file) {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => {
-      img.onerror = reject;
-      img.onload = () => {
-        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
-        const w = Math.round(img.width * scale);
-        const h = Math.round(img.height * scale);
-        const canvas = document.createElement("canvas");
-        canvas.width = w;
-        canvas.height = h;
-        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-        const dataUrl = canvas.toDataURL("image/jpeg", quality);
-        resolve({ dataUrl, base64: dataUrl.split(",")[1], mediaType: "image/jpeg" });
-      };
-      img.src = reader.result;
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
     };
-    reader.readAsDataURL(file);
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Couldn't read that photo"));
+    };
+    img.src = url;
   });
+}
+
+// Claude accepts images, not video files — pull a still from the clip so the
+// user can still send what they filmed on iPad.
+function frameFromVideo(file, maxDim = 1280, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const video = document.createElement("video");
+    video.preload = "metadata";
+    video.muted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "true");
+
+    const fail = (err) => {
+      URL.revokeObjectURL(url);
+      reject(err instanceof Error ? err : new Error("Couldn't read that video"));
+    };
+
+    video.onloadeddata = () => {
+      const seekTo = Math.min(0.25, (video.duration || 1) / 2);
+      const capture = () => {
+        try {
+          const scale = Math.min(1, maxDim / Math.max(video.videoWidth || 1, video.videoHeight || 1));
+          const w = Math.max(1, Math.round((video.videoWidth || 640) * scale));
+          const h = Math.max(1, Math.round((video.videoHeight || 480) * scale));
+          const canvas = document.createElement("canvas");
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext("2d").drawImage(video, 0, 0, w, h);
+          URL.revokeObjectURL(url);
+          const dataUrl = canvas.toDataURL("image/jpeg", quality);
+          resolve({
+            dataUrl,
+            base64: dataUrl.split(",")[1],
+            mediaType: "image/jpeg",
+            kind: "video",
+            label: file.name || "video",
+          });
+        } catch (err) {
+          fail(err);
+        }
+      };
+      if (seekTo > 0 && Number.isFinite(video.duration)) {
+        video.onseeked = capture;
+        try {
+          video.currentTime = seekTo;
+        } catch {
+          capture();
+        }
+      } else {
+        capture();
+      }
+    };
+    video.onerror = fail;
+    video.src = url;
+  });
+}
+
+async function prepareMedia(file) {
+  if (file.type.startsWith("video/")) return frameFromVideo(file);
+  return resizeImage(file);
 }
 
 const timeOf = (at) => new Date(at || Date.now()).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
@@ -83,8 +160,9 @@ function ActionCoach({ step, color, onClose }) {
   const [messages, setMessages] = useState(cached || [seed]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(!cached);
-  const [pendingImages, setPendingImages] = useState([]); // [{ dataUrl, base64, mediaType }]
-  const bottomRef = useRef(null);
+  const [pendingImages, setPendingImages] = useState([]); // [{ dataUrl, base64, mediaType, kind }]
+  const [attachError, setAttachError] = useState("");
+  const listRef = useRef(null);
   const startedRef = useRef(false);
   const fileInputRef = useRef(null);
   const textareaRef = useRef(null);
@@ -93,9 +171,14 @@ function ActionCoach({ step, color, onClose }) {
     const files = Array.from(e.target.files || []);
     e.target.value = "";
     if (!files.length) return;
+    setAttachError("");
     const room = MAX_IMAGES - pendingImages.length;
-    const resized = await Promise.all(files.slice(0, Math.max(room, 0)).map(resizeImage));
-    setPendingImages((prev) => [...prev, ...resized]);
+    const slice = files.slice(0, Math.max(room, 0));
+    const results = await Promise.allSettled(slice.map(prepareMedia));
+    const ok = results.filter((r) => r.status === "fulfilled").map((r) => r.value);
+    const failed = results.length - ok.length;
+    if (ok.length) setPendingImages((prev) => [...prev, ...ok]);
+    if (failed) setAttachError(failed === results.length ? "Couldn't attach that media — try a photo or a shorter clip." : "Some files couldn't be attached.");
   };
 
   const removeImage = (idx) => setPendingImages((prev) => prev.filter((_, i) => i !== idx));
@@ -116,9 +199,14 @@ function ActionCoach({ step, color, onClose }) {
     setChat(chatKey, messages);
   }, [messages, chatKey, setChat]);
 
+  // Scroll only the conversation pane — never the page. scrollIntoView on
+  // iPad Safari often shifts the whole fixed sheet so the composer drops
+  // under the tab bar / below the visible viewport.
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [messages, loading]);
+    const el = listRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }, [messages, loading, pendingImages]);
 
   // Auto-grow the composer, WhatsApp-style, up to ~5 lines.
   useEffect(() => {
@@ -128,16 +216,29 @@ function ActionCoach({ step, color, onClose }) {
     el.style.height = Math.min(el.scrollHeight, 112) + "px";
   }, [input]);
 
+  // Lock background scroll while the sheet is open (iPad rubber-band otherwise
+  // slides the fixed overlay and hides the reply bar).
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
   const canSend = (input.trim() || pendingImages.length > 0) && !loading;
 
   const send = async () => {
     const text = input.trim();
     if (!canSend) return;
 
+    const hasVideo = pendingImages.some((p) => p.kind === "video");
+    const fallbackText = hasVideo
+      ? "Here's a still from the video I just took."
+      : "Here's what I've got.";
+
     const content = pendingImages.length
       ? [
           ...pendingImages.map((img) => ({ type: "image", source: { type: "base64", media_type: img.mediaType, data: img.base64 } })),
-          { type: "text", text: text || "Here's what I've got." },
+          { type: "text", text: text || fallbackText },
         ]
       : text;
 
@@ -145,6 +246,7 @@ function ActionCoach({ step, color, onClose }) {
     setMessages(history);
     setInput("");
     setPendingImages([]);
+    setAttachError("");
     setLoading(true);
     const reply = await coachJane({ history, step, cityName, profile });
     setMessages((prev) => [...prev, { role: "assistant", content: reply, at: Date.now() }]);
@@ -160,19 +262,32 @@ function ActionCoach({ step, color, onClose }) {
 
   const visible = messages.filter((m) => !m.hidden);
 
-  return (
+  // Portal to <body> so the sheet isn't trapped under Home's stacking
+  // context — on iPad the tab bar was painting over the reply/composer row.
+  return createPortal(
     <div
       onClick={onClose}
-      style={{ position: "fixed", inset: 0, background: "rgba(26,26,20,0.34)", display: "flex", alignItems: "flex-end", justifyContent: "center", zIndex: 70 }}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(26,26,20,0.34)",
+        display: "flex",
+        alignItems: "flex-end",
+        justifyContent: "center",
+        zIndex: 200,
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+      }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className="bhumi-jane-rise"
+        role="dialog"
+        aria-label="Chat with Jane"
         style={{
           width: "100%",
           maxWidth: 680,
-          height: "82vh",
-          maxHeight: "82vh",
+          height: "min(82dvh, 82vh)",
+          maxHeight: "min(82dvh, 82vh)",
           background: "#EFEAE0",
           borderRadius: "18px 18px 0 0",
           border: "1px solid #ECEAE1",
@@ -183,7 +298,7 @@ function ActionCoach({ step, color, onClose }) {
         }}
       >
         {/* Header */}
-        <div style={{ padding: "14px 18px 12px", borderBottom: "1px solid #E4DFD1", display: "flex", alignItems: "flex-start", gap: 12, background: "#FAF8F2" }}>
+        <div style={{ flexShrink: 0, padding: "14px 18px 12px", borderBottom: "1px solid #E4DFD1", display: "flex", alignItems: "flex-start", gap: 12, background: "#FAF8F2" }}>
           <div
             style={{
               width: 34, height: 34, borderRadius: "50%", flexShrink: 0, marginTop: 1,
@@ -205,8 +320,12 @@ function ActionCoach({ step, color, onClose }) {
           </button>
         </div>
 
-        {/* Conversation */}
-        <div className="bhumi-no-scrollbar" style={{ flex: 1, overflowY: "auto", padding: "14px 14px 6px", display: "flex", flexDirection: "column", gap: 8 }}>
+        {/* Conversation — minHeight:0 so the composer never gets clipped */}
+        <div
+          ref={listRef}
+          className="bhumi-no-scrollbar"
+          style={{ flex: 1, minHeight: 0, overflowY: "auto", WebkitOverflowScrolling: "touch", padding: "14px 14px 6px", display: "flex", flexDirection: "column", gap: 8 }}
+        >
           {visible.map((m, i) =>
             m.role === "user" ? (
               <div key={i} className="bhumi-rise" style={{ alignSelf: "flex-end", maxWidth: "80%", background: "#DDF3C8", borderRadius: "13px 13px 3px 13px", padding: m.displayImages?.length ? 5 : "8px 11px", boxShadow: "0 1px 1px rgba(0,0,0,0.06)" }}>
@@ -237,22 +356,27 @@ function ActionCoach({ step, color, onClose }) {
               <TypingDots color={color} />
             </div>
           )}
-          <div ref={bottomRef} />
         </div>
 
-        {/* Composer */}
-        <div style={{ padding: "8px 10px calc(10px + env(safe-area-inset-bottom, 0px))", background: "#F0EDE4" }}>
+        {/* Composer — flexShrink:0 keeps the reply bar visible on iPad */}
+        <div style={{ flexShrink: 0, padding: "8px 10px 10px", background: "#F0EDE4", borderTop: "1px solid #E4DFD1" }}>
           {!janeIsLive() && (
             <div style={{ fontSize: 11, color: "#B0AC9E", marginBottom: 6, textAlign: "center" }}>Demo mode — add a VITE_ANTHROPIC_API_KEY for the live Jane.</div>
+          )}
+          {attachError && (
+            <div style={{ fontSize: 11, color: "#9A6A1A", marginBottom: 6, textAlign: "center" }}>{attachError}</div>
           )}
           {pendingImages.length > 0 && (
             <div className="bhumi-no-scrollbar" style={{ display: "flex", gap: 8, marginBottom: 8, overflowX: "auto", padding: "2px 2px" }}>
               {pendingImages.map((img, i) => (
                 <div key={i} style={{ position: "relative", flexShrink: 0 }}>
                   <img src={img.dataUrl} alt="attached" style={{ width: 62, height: 62, objectFit: "cover", borderRadius: 10, display: "block" }} />
+                  {img.kind === "video" && (
+                    <span style={{ position: "absolute", left: 4, bottom: 4, fontSize: 9, fontWeight: 700, color: "#fff", background: "rgba(0,0,0,0.55)", borderRadius: 4, padding: "1px 4px" }}>VIDEO</span>
+                  )}
                   <button
                     onClick={() => removeImage(i)}
-                    aria-label="Remove photo"
+                    aria-label="Remove attachment"
                     style={{
                       position: "absolute", top: -6, right: -6, width: 20, height: 20, borderRadius: "50%",
                       background: "#1A1A14", border: "2px solid #F0EDE4", color: "#fff", cursor: "pointer",
@@ -266,7 +390,7 @@ function ActionCoach({ step, color, onClose }) {
               {pendingImages.length < MAX_IMAGES && (
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  aria-label="Add another photo"
+                  aria-label="Add another photo or video"
                   style={{ width: 62, height: 62, borderRadius: 10, border: "1.5px dashed #C9C5B8", background: "transparent", color: "#9A968A", cursor: "pointer", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
@@ -275,11 +399,18 @@ function ActionCoach({ step, color, onClose }) {
             </div>
           )}
           <div style={{ display: "flex", gap: 7, alignItems: "flex-end" }}>
-            <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={attachImages} style={{ display: "none" }} />
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept={MEDIA_ACCEPT}
+              multiple
+              onChange={attachImages}
+              style={{ display: "none" }}
+            />
             <div style={{ flex: 1, display: "flex", alignItems: "flex-end", gap: 4, background: "#FFFFFF", borderRadius: 22, padding: "4px 6px 4px 6px", boxShadow: "0 1px 2px rgba(0,0,0,0.08)" }}>
               <button
                 onClick={() => fileInputRef.current?.click()}
-                aria-label="Attach photos"
+                aria-label="Attach photos or videos"
                 disabled={pendingImages.length >= MAX_IMAGES}
                 style={{ background: "transparent", border: "none", cursor: "pointer", color: "#8A8678", padding: 7, flexShrink: 0, display: "flex", opacity: pendingImages.length >= MAX_IMAGES ? 0.4 : 1 }}
               >
@@ -292,7 +423,8 @@ function ActionCoach({ step, color, onClose }) {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Tell Jane what you see…"
-                style={{ flex: 1, border: "none", outline: "none", resize: "none", fontSize: 14.5, padding: "8px 4px", background: "transparent", color: "#1A1A14", fontFamily: "inherit", lineHeight: 1.4, maxHeight: 112 }}
+                enterKeyHint="send"
+                style={{ flex: 1, border: "none", outline: "none", resize: "none", fontSize: 16, padding: "8px 4px", background: "transparent", color: "#1A1A14", fontFamily: "inherit", lineHeight: 1.4, maxHeight: 112 }}
               />
             </div>
             <button
@@ -310,7 +442,8 @@ function ActionCoach({ step, color, onClose }) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
