@@ -275,7 +275,6 @@ function ActionCoach({ step, color, onClose }) {
         alignItems: "flex-end",
         justifyContent: "center",
         zIndex: 200,
-        paddingBottom: "env(safe-area-inset-bottom, 0px)",
       }}
     >
       <div
@@ -286,8 +285,10 @@ function ActionCoach({ step, color, onClose }) {
         style={{
           width: "100%",
           maxWidth: 680,
-          height: "min(82dvh, 82vh)",
-          maxHeight: "min(82dvh, 82vh)",
+          // Sit flush on the viewport bottom so the tab bar cannot peek
+          // through or steal taps from the composer on iPad.
+          height: "min(88dvh, 88vh)",
+          maxHeight: "min(88dvh, 88vh)",
           background: "#EFEAE0",
           borderRadius: "18px 18px 0 0",
           border: "1px solid #ECEAE1",
@@ -295,6 +296,7 @@ function ActionCoach({ step, color, onClose }) {
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
+          boxShadow: "0 -8px 28px -10px rgba(28,23,16,0.35)",
         }}
       >
         {/* Header */}
@@ -359,7 +361,7 @@ function ActionCoach({ step, color, onClose }) {
         </div>
 
         {/* Composer — flexShrink:0 keeps the reply bar visible on iPad */}
-        <div style={{ flexShrink: 0, padding: "8px 10px 10px", background: "#F0EDE4", borderTop: "1px solid #E4DFD1" }}>
+        <div style={{ flexShrink: 0, padding: "8px 10px calc(10px + env(safe-area-inset-bottom, 0px))", background: "#F0EDE4", borderTop: "1px solid #E4DFD1" }}>
           {!janeIsLive() && (
             <div style={{ fontSize: 11, color: "#B0AC9E", marginBottom: 6, textAlign: "center" }}>Demo mode — add a VITE_ANTHROPIC_API_KEY for the live Jane.</div>
           )}
