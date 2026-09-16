@@ -216,12 +216,12 @@ function ActionCoach({ step, color, onClose }) {
     el.style.height = Math.min(el.scrollHeight, 112) + "px";
   }, [input]);
 
-  // Lock background scroll while the sheet is open (iPad rubber-band otherwise
-  // slides the fixed overlay and hides the reply bar).
+  // Hide the tab bar + lock scroll for the life of this sheet. On iPad
+  // (especially landscape / installed PWA) the fixed tab bar otherwise
+  // paints over the reply row even when the sheet is portaled.
   useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    document.body.classList.add("bhumi-jane-open");
+    return () => { document.body.classList.remove("bhumi-jane-open"); };
   }, []);
 
   const canSend = (input.trim() || pendingImages.length > 0) && !loading;
@@ -270,37 +270,39 @@ function ActionCoach({ step, color, onClose }) {
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(26,26,20,0.34)",
-        display: "flex",
-        alignItems: "flex-end",
-        justifyContent: "center",
-        zIndex: 200,
+        background: "rgba(26,26,20,0.45)",
+        zIndex: 1000,
       }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bhumi-jane-rise"
+        className="bhumi-jane-sheet"
         role="dialog"
+        aria-modal="true"
         aria-label="Chat with Jane"
         style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          margin: "0 auto",
           width: "100%",
           maxWidth: 680,
-          // Sit flush on the viewport bottom so the tab bar cannot peek
-          // through or steal taps from the composer on iPad.
-          height: "min(88dvh, 88vh)",
-          maxHeight: "min(88dvh, 88vh)",
+          // Fill almost the whole screen so the composer is never below the fold —
+          // portrait or landscape.
+          top: "max(8px, env(safe-area-inset-top, 0px))",
+          display: "grid",
+          gridTemplateRows: "auto minmax(0, 1fr) auto",
           background: "#EFEAE0",
           borderRadius: "18px 18px 0 0",
           border: "1px solid #ECEAE1",
           borderBottom: "none",
-          display: "flex",
-          flexDirection: "column",
           overflow: "hidden",
           boxShadow: "0 -8px 28px -10px rgba(28,23,16,0.35)",
         }}
       >
         {/* Header */}
-        <div style={{ flexShrink: 0, padding: "14px 18px 12px", borderBottom: "1px solid #E4DFD1", display: "flex", alignItems: "flex-start", gap: 12, background: "#FAF8F2" }}>
+        <div style={{ padding: "14px 18px 12px", borderBottom: "1px solid #E4DFD1", display: "flex", alignItems: "flex-start", gap: 12, background: "#FAF8F2" }}>
           <div
             style={{
               width: 34, height: 34, borderRadius: "50%", flexShrink: 0, marginTop: 1,
@@ -322,11 +324,11 @@ function ActionCoach({ step, color, onClose }) {
           </button>
         </div>
 
-        {/* Conversation — minHeight:0 so the composer never gets clipped */}
+        {/* Conversation */}
         <div
           ref={listRef}
           className="bhumi-no-scrollbar"
-          style={{ flex: 1, minHeight: 0, overflowY: "auto", WebkitOverflowScrolling: "touch", padding: "14px 14px 6px", display: "flex", flexDirection: "column", gap: 8 }}
+          style={{ minHeight: 0, overflowY: "auto", WebkitOverflowScrolling: "touch", padding: "14px 14px 6px", display: "flex", flexDirection: "column", gap: 8 }}
         >
           {visible.map((m, i) =>
             m.role === "user" ? (
@@ -360,8 +362,8 @@ function ActionCoach({ step, color, onClose }) {
           )}
         </div>
 
-        {/* Composer — flexShrink:0 keeps the reply bar visible on iPad */}
-        <div style={{ flexShrink: 0, padding: "8px 10px calc(10px + env(safe-area-inset-bottom, 0px))", background: "#F0EDE4", borderTop: "1px solid #E4DFD1" }}>
+        {/* Composer — grid row 3, always on-screen */}
+        <div style={{ padding: "8px 10px calc(12px + env(safe-area-inset-bottom, 0px))", background: "#F0EDE4", borderTop: "1px solid #E4DFD1" }}>
           {!janeIsLive() && (
             <div style={{ fontSize: 11, color: "#B0AC9E", marginBottom: 6, textAlign: "center" }}>Demo mode — add a VITE_ANTHROPIC_API_KEY for the live Jane.</div>
           )}
@@ -411,6 +413,7 @@ function ActionCoach({ step, color, onClose }) {
             />
             <div style={{ flex: 1, display: "flex", alignItems: "flex-end", gap: 4, background: "#FFFFFF", borderRadius: 22, padding: "4px 6px 4px 6px", boxShadow: "0 1px 2px rgba(0,0,0,0.08)" }}>
               <button
+                type="button"
                 onClick={() => fileInputRef.current?.click()}
                 aria-label="Attach photos or videos"
                 disabled={pendingImages.length >= MAX_IMAGES}
@@ -430,11 +433,12 @@ function ActionCoach({ step, color, onClose }) {
               />
             </div>
             <button
+              type="button"
               onClick={send}
               disabled={!canSend}
               aria-label="Send"
               style={{
-                width: 40, height: 40, borderRadius: "50%", border: "none", flexShrink: 0,
+                width: 44, height: 44, borderRadius: "50%", border: "none", flexShrink: 0,
                 background: canSend ? color : "#D8D3C4", color: "white", cursor: canSend ? "pointer" : "default",
                 display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.15s",
               }}

@@ -13,6 +13,7 @@ const TABS = [
 export default function TabBar({ page, onChange }) {
   return (
     <div
+      data-bhumi-tabbar="1"
       style={{
         position: "fixed",
         left: 0,
