@@ -153,3 +153,25 @@ textarea {
 /* Hide scrollbars on the canvas while keeping scroll */
 .bhumi-no-scrollbar::-webkit-scrollbar { display: none; }
 .bhumi-no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* While Jane's coach sheet is open, park the tab bar so it cannot
+   cover the reply/composer row on iPad (esp. landscape / PWA). */
+body.bhumi-jane-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+body.bhumi-jane-open [data-bhumi-tabbar] {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Opacity-only entrance — never leave a transform on the sheet.
+   A lingering translateY(0) creates a containing block that breaks
+   fixed/absolute composer layout on iPadOS Safari. */
+@keyframes bhumi-jane-sheet-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.bhumi-jane-sheet {
+  animation: bhumi-jane-sheet-in var(--t-base) var(--ease) both;
+}
