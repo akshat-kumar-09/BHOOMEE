@@ -8,10 +8,9 @@ The body is **Bhumi**. The voice is **Jane** — the voice of the earth, transla
 
 ## What's inside
 
-- **Onboarding** — five tap-only calibration questions (Time, Life, Reach, Comfort, Connections).
-- **Local** — your city (default Glasgow), its 333 score, Jane's briefing, three calibrated "Start here" tasks, the locked ladder above you, and all active pipelines.
-- **Global** — 33 cities ranked by need (lowest score first), Mumbai at the top, Oslo at the bottom.
-- **Playground** — co-design a real pipeline with Jane. She sharpens your idea with questions and emits structured `[STEP]` blocks that fill a live draft card. Save it privately, share it with your city, or propose it to Bhumi.
+- **Home** — map-based ground under your feet: live Europe missions framed as domain pipelines, with Jane coaching each step.
+- **Global** — 33 cities on six continents as movement infrastructure (not a climate-tech demo): 11 hand-picked European levers, 9 in Asia, and at least one city on every inhabited continent. Ordered by need. Council-election calendars beat population.
+- **Playground** — co-design a real pipeline with Jane. She sharpens your idea with questions and emits structured `[STEP]` blocks that fill a live draft card. Save it privately, share it with your city, or propose it to Bhoomee.
 - **Do it with Jane** — every action step has a coach button that opens a focused, real-time conversation to walk you through actually doing it.
 - **Team mode** — two (or more) phones on the same team share progress live: completed steps, who did them, community pipelines, and presence all sync in real time via Firebase.
 - **You** — your team (name, members online, invite link), your calibration, completed-step count, and the pipelines you've built.
@@ -87,9 +86,9 @@ Cream `#FAF8F2` · white cards · `#ECEAE1` borders · ink `#1A1A14`. The 333 sc
 api/
   jane.js       serverless proxy — calls Anthropic with the server-side key
 src/
-  pages/        Onboarding · Local · Global · Playground · You
+  pages/        Onboarding · Home · Global · Library · Playground · You
   components/   ScoreRing · PipelineCard · JaneNote · TabBar · AskJane · StepCoach · TeamBar · ...
-  data/         cities.js — the 33-city source of truth
+  data/         cities.js — 33-city working map (6 continents, ordered by need)
   lib/          jane.js (Jane routing) · firebase.js (team sync) · calibration.js · score.js
   context/      AppContext.jsx — profile + live team state
   styles/       tokens.css — design tokens + motion

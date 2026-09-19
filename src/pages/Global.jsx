@@ -16,27 +16,32 @@ export default function Global() {
 
   return (
     <div className="bhumi-page">
-      <BrandHeader subtitle="33 cities · ranked by need" />
+      <BrandHeader subtitle="33 cities · six continents · where one person still moves a council" />
 
       <div style={{ marginBottom: 22 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 700, color: "#1A1A14", margin: "0 0 6px", letterSpacing: "-0.01em" }}>Earth has work in 33 cities</h2>
-        <p style={{ fontSize: 13.5, color: "#8A8678", lineHeight: 1.6, margin: 0, maxWidth: 560 }}>
-          Not the most damaged cities — the most <em>solvable</em> ones. Places where people can act and councils can be moved. Ranked by need: lowest scores first.
+        <h2 className="bhumi-display" style={{ fontSize: 22, color: "#1C1710", margin: "0 0 8px", letterSpacing: "-0.015em", lineHeight: 1.25 }}>
+          Council calendars beat population.
+        </h2>
+        <p style={{ fontSize: 13.5, color: "#5A5848", lineHeight: 1.65, margin: 0, maxWidth: 560 }}>
+          Not a climate-tech demo. A working map of places where one persuaded person can still move mountains:
+          upcoming elections, disasters that haven’t been weaponized yet, university towns that actually run the chamber,
+          mayors who just pissed everyone off. Eleven of the thirty-three are in Europe — hand-picked, not a continent quota.
+          Asia is a hub. Ordered by need: lowest 333 score first.
         </p>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 8, marginBottom: 28 }}>
         {GLOBAL_STATS.map((s) => (
-          <div key={s.label} style={{ background: "#FFFFFF", border: "1px solid #ECEAE1", borderRadius: 11, padding: "12px 14px" }}>
+          <div key={s.label} style={{ background: "#FFFFFF", borderRadius: 12, padding: "12px 14px", boxShadow: "var(--shadow-card)" }}>
             <div style={{ fontSize: 11, color: "#9A968A", marginBottom: 5 }}>{s.label}</div>
             <div style={{ fontSize: 19, fontWeight: 700, color: "#1A1A14", marginBottom: 3 }}>{s.value}</div>
-            <div style={{ fontSize: 10.5, color: s.bad ? "#A83A2A" : "#2D6B22", lineHeight: 1.3 }}>↑ {s.delta}</div>
+            <div style={{ fontSize: 10.5, color: s.bad ? "#A83A2A" : "#2D6B22", lineHeight: 1.3 }}>{s.delta}</div>
           </div>
         ))}
       </div>
 
       <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#A8A496", marginBottom: 12 }}>
-        The hierarchy · most urgent first
+        By need · Denton → Christchurch
       </div>
 
       {ranked.map((city, idx) => {
@@ -45,7 +50,18 @@ export default function Global() {
         const isOpen = openCity === city.id;
         const isUser = city.id === userCityId;
         return (
-          <div key={city.id} style={{ background: "#FFFFFF", border: `1px solid ${isOpen ? "#C9C5B8" : "#ECEAE1"}`, borderRadius: 13, marginBottom: 8, overflow: "hidden", transition: "border-color 0.2s" }}>
+          <div
+            key={city.id}
+            style={{
+              background: "#FFFFFF",
+              borderRadius: 13,
+              marginBottom: 8,
+              overflow: "hidden",
+              boxShadow: isOpen ? "var(--shadow-lift)" : "var(--shadow-card)",
+              outline: isOpen ? "1px solid #C9C5B8" : "1px solid transparent",
+              transition: "box-shadow 0.2s, outline-color 0.2s",
+            }}
+          >
             <div onClick={() => setOpenCity(isOpen ? null : city.id)} style={{ display: "flex", alignItems: "center", gap: 13, padding: "13px 16px", cursor: "pointer", userSelect: "none" }}>
               <span style={{ fontSize: 13, fontWeight: 600, color: "#C2BEB0", width: 22, flexShrink: 0, fontVariantNumeric: "tabular-nums" }}>{idx + 1}</span>
               <div style={{ position: "relative", width: 42, height: 42, flexShrink: 0 }}>
@@ -58,6 +74,7 @@ export default function Global() {
                 <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
                   <span style={{ fontSize: 15, fontWeight: 600, color: "#1A1A14" }}>{city.name}</span>
                   <span style={{ fontSize: 12, color: "#A8A496" }}>{city.country}</span>
+                  <span style={{ fontSize: 9.5, fontWeight: 600, color: "#8A8678", letterSpacing: "0.04em", textTransform: "uppercase" }}>{city.region}</span>
                   {isUser && <span style={{ fontSize: 9.5, fontWeight: 600, padding: "2px 7px", borderRadius: 20, background: "#2D6B22", color: "white", letterSpacing: "0.04em" }}>YOU</span>}
                 </div>
                 <div style={{ fontSize: 12, color: "#8A8678", lineHeight: 1.4, marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: isOpen ? "normal" : "nowrap" }}>{city.headline}</div>

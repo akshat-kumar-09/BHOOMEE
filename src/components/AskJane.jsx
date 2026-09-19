@@ -11,7 +11,7 @@ export default function AskJane({ city, scope = "local" }) {
   const [loading, setLoading] = useState(false);
 
   const placeholder =
-    scope === "local" && city ? `Ask Jane about ${city.name}...` : "Ask Jane about the bigger picture...";
+    scope === "local" && city ? `Ask Jane about ${city.name}...` : "Ask Jane about a city where one person still moves the council...";
 
   const submit = async () => {
     const q = question.trim();
