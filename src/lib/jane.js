@@ -81,7 +81,7 @@ export async function askJane({ question, city, profile, scope = "local" }) {
   const context =
     scope === "local" && city
       ? `You are speaking to someone in ${city.name}, ${city.country}. The city scores ${city.score.total}/333 and is ${city.direction}. Key issue: ${city.headline} ${profileLine(profile)}`
-      : `You are speaking about the global picture across the 33 cities Bhoomee tracks. Be willing to compare cities and zoom out to planetary scale. ${profileLine(profile)}`;
+      : `You are speaking about Bhoomee's working map of 33 European cities — not a world ranking of damage, a set of places where civic levers (FOIs, water boards, hearings, disclosure laws) still move. Be willing to compare cities across Europe and say when a sharper legal move beats the obvious one. ${profileLine(profile)}`;
 
   const system = `You are Jane — the voice of Mother Earth, translated into language people can act on. ${context} ${JANE_VOICE} Every reply should make the person feel they can do one real thing, and that it's sharper than the thing they'd have thought of on their own. 2-4 sentences. You are not an AI assistant; you are Jane.`;
 
@@ -277,7 +277,7 @@ function textOf(res) {
 
 function mockAskJane(q, city, scope) {
   if (scope !== "local" || !city)
-    return "Thirty-three cities, one planet, and the same pattern everywhere: the mechanisms to act already exist, they're just waiting for someone to use them. Pick the city you stand in and start there. Where are your feet right now?";
+    return "Thirty-three European cities, same handful of levers everywhere: FOIs, water boards, hearings, disclosure laws — waiting for someone to use them. Pick the ground under your feet and start there. Where are you standing right now?";
   return `In ${city.name}, the bottleneck isn't knowledge — it's witnesses. ${city.headline} Pick one stretch of water or one street this week and just document what you see. What's the nearest piece of nature you could reach on foot today?`;
 }
 

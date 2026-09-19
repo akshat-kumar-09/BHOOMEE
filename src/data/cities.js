@@ -1,8 +1,13 @@
 /* ════════════════════════════════════════════════════════════════
-   BHOOMEE — 33 cities, all in Europe, researched and ranked by need.
-   Score out of 333 = Earth (111) + People (111) + Momentum (111)
-   Lower score = more urgent. These 33 are picked not as the worst,
-   but as the most SOLVABLE — civic mechanisms exist, people can act.
+   BHOOMEE — 33 European cities. A working map, not a damage ranking.
+
+   Score out of 333 = Earth (111) + People (111) + Momentum (111).
+   Lower score = more need for witnesses. Ordered Belgrade → Oslo.
+
+   Europe first: not because it's the worst continent, but because
+   the levers still move here — FOIs, water boards, public hearings,
+   disclosure laws. Each city has real civic mechanisms a person
+   can pull. More ground later.
 ═══════════════════════════════════════════════════════════════════ */
 
 export const USER_CITY = "london"; // detected location — set to London for the day
@@ -448,10 +453,7 @@ export const CITIES = [
 ];
 
 export const GLOBAL_STATS = [
-  { label: "CO₂ concentration", value: "424 ppm", delta: "highest in 800,000 years", bad: true },
-  { label: "Global temperature rise", value: "+1.45°C", delta: "since pre-industrial", bad: true },
-  { label: "Species threatened", value: "47,000+", delta: "on the IUCN Red List", bad: true },
-  { label: "Renewable energy share", value: "32%", delta: "up from 22% in 2015", bad: false },
-  { label: "Forest lost (2024)", value: "3.7M ha", delta: "primary tropical forest", bad: true },
-  { label: "Cities Bhoomee tracks", value: "33", delta: "and growing", bad: false },
+  { label: "Cities on the map", value: "33", delta: "Europe for now", bad: false },
+  { label: "Score scale", value: "/333", delta: "Earth · People · Momentum", bad: false },
+  { label: "Ordered by", value: "Need", delta: "lowest score first", bad: false },
 ];
