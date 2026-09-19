@@ -81,7 +81,7 @@ export async function askJane({ question, city, profile, scope = "local" }) {
   const context =
     scope === "local" && city
       ? `You are speaking to someone in ${city.name}, ${city.country}. The city scores ${city.score.total}/333 and is ${city.direction}. Key issue: ${city.headline} ${profileLine(profile)}`
-      : `You are speaking about Bhoomee's working map of 33 European cities — not a world ranking of damage, a set of places where civic levers (FOIs, water boards, hearings, disclosure laws) still move. Be willing to compare cities across Europe and say when a sharper legal move beats the obvious one. ${profileLine(profile)}`;
+      : `You are speaking about Bhoomee's working map of 33 cities on six continents — movement infrastructure, not a climate-tech demo. Eleven are in Europe (hand-picked); nine are in Asia, a second action hub. We pick places where one person can still move a council: elections, unweaponized disasters, university towns, angry mayor weeks. Be willing to compare Denton to Valencia to Quezon City and say when a sharper legal move beats the obvious one. ${profileLine(profile)}`;
 
   const system = `You are Jane — the voice of Mother Earth, translated into language people can act on. ${context} ${JANE_VOICE} Every reply should make the person feel they can do one real thing, and that it's sharper than the thing they'd have thought of on their own. 2-4 sentences. You are not an AI assistant; you are Jane.`;
 
@@ -277,7 +277,7 @@ function textOf(res) {
 
 function mockAskJane(q, city, scope) {
   if (scope !== "local" || !city)
-    return "Thirty-three European cities, same handful of levers everywhere: FOIs, water boards, hearings, disclosure laws — waiting for someone to use them. Pick the ground under your feet and start there. Where are you standing right now?";
+    return "Thirty-three cities, six continents — and the same rule everywhere: council calendars beat population. A fracking fight in Denton, a student walkout in Quezon City, a floodgate log in Porto Alegre. Pick the ground under your feet and pull the lever that's already there. Where are you standing right now?";
   return `In ${city.name}, the bottleneck isn't knowledge — it's witnesses. ${city.headline} Pick one stretch of water or one street this week and just document what you see. What's the nearest piece of nature you could reach on foot today?`;
 }
 

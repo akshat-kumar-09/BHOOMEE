@@ -9,7 +9,7 @@ The body is **Bhumi**. The voice is **Jane** — the voice of the earth, transla
 ## What's inside
 
 - **Home** — map-based ground under your feet: live Europe missions framed as domain pipelines, with Jane coaching each step.
-- **Global** — 33 European cities as a working map (not a damage ranking), ordered by need (Belgrade → Oslo). Lowest 333 score first.
+- **Global** — 33 cities on six continents as movement infrastructure (not a climate-tech demo): 11 hand-picked European levers, 9 in Asia, and at least one city on every inhabited continent. Ordered by need. Council-election calendars beat population.
 - **Playground** — co-design a real pipeline with Jane. She sharpens your idea with questions and emits structured `[STEP]` blocks that fill a live draft card. Save it privately, share it with your city, or propose it to Bhoomee.
 - **Do it with Jane** — every action step has a coach button that opens a focused, real-time conversation to walk you through actually doing it.
 - **Team mode** — two (or more) phones on the same team share progress live: completed steps, who did them, community pipelines, and presence all sync in real time via Firebase.
@@ -88,7 +88,7 @@ api/
 src/
   pages/        Onboarding · Home · Global · Library · Playground · You
   components/   ScoreRing · PipelineCard · JaneNote · TabBar · AskJane · StepCoach · TeamBar · ...
-  data/         cities.js — 33 European cities (working map, ordered by need)
+  data/         cities.js — 33-city working map (6 continents, ordered by need)
   lib/          jane.js (Jane routing) · firebase.js (team sync) · calibration.js · score.js
   context/      AppContext.jsx — profile + live team state
   styles/       tokens.css — design tokens + motion
